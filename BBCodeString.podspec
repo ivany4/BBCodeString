@@ -16,10 +16,10 @@ Pod::Spec.new do |s|
 BBCodeString is a simple library which enables you to create NSAttributedString object from bb code string.
 
                        DESC
-  s.homepage         = "https://github.com/mrataj/BBCodeString"
+  s.homepage         = "https://github.com/ivany4/BBCodeString"
   s.license          = 'MIT'
   s.author           = { "Miha Rataj" => "rataj.miha@gmail.com" }
-  s.source           = { :git => "https://github.com/mrataj/BBCodeString.git", :tag => s.version.to_s }
+  s.source           = { :git => "https://github.com/ivany4/BBCodeString.git", :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/miharataj'
 
   s.ios.deployment_target = '7.0'
