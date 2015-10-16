@@ -7,7 +7,6 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <UIKit/UIKit.h>
 #import "BBCodeStringDelegate.h"
 #import "BBCodeString.h"
 #import "BBElement.h"
@@ -47,7 +46,11 @@
     XCTAssertTrue([bbCodeString.attributedString.string isEqualToString:expectedString], @"Invalid string");
 }
 
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
 - (UIFont *)getFont:(BBElement *)element
+#else
+- (NSFont *)getFont:(BBElement *)element
+#endif
 {
     if ([element.tag isEqualToString:kUserTag])
         _userTagFontRequested = YES;
@@ -55,10 +58,18 @@
     if ([element.tag isEqualToString:kFileTag])
         _fileTagFontRequested = YES;
     
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
     return [UIFont systemFontOfSize:16.0];
+#else
+    return [NSFont systemFontOfSize:16.0];
+#endif
 }
 
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
 - (UIColor *)getTextColor:(BBElement *)element
+#else
+- (NSColor *)getTextColor:(BBElement *)element
+#endif
 {
     if ([element.tag isEqualToString:kUserTag])
         _userTagColorRequested = YES;
@@ -66,7 +77,11 @@
     if ([element.tag isEqualToString:kFileTag])
         _fileTagColorRequested = YES;
     
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
     return [UIColor darkGrayColor];
+#else
+    return [NSColor darkGrayColor];
+#endif
 }
 
 - (NSArray *)getSupportedTags

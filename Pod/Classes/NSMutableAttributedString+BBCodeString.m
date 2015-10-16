@@ -10,7 +10,11 @@
 
 @implementation NSMutableAttributedString (BBCodeString)
 
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
 - (void)setFont:(UIFont *)font
+#else
+- (void)setFont:(NSFont *)font
+#endif
 {
     NSRange range = NSMakeRange(0, [self.string length]);
     [self addAttribute:NSFontAttributeName
@@ -18,7 +22,11 @@
                  range:range];
 }
 
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
 - (void)setColor:(UIColor *)color
+#else
+- (void)setColor:(NSColor *)color
+#endif
 {
     NSRange range = NSMakeRange(0, [self.string length]);
     [self addAttribute:NSForegroundColorAttributeName

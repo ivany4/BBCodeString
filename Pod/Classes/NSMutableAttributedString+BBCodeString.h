@@ -10,7 +10,12 @@
 
 @interface NSMutableAttributedString (BBCodeString)
 
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
 - (void)setFont:(UIFont *)font;
 - (void)setColor:(UIColor *)color;
+#else
+- (void)setFont:(NSFont *)font;
+- (void)setColor:(NSColor *)color;
+#endif
 
 @end

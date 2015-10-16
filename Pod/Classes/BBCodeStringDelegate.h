@@ -7,14 +7,25 @@
 //
 
 #import <Foundation/Foundation.h>
+
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
 #import <UIKit/UIKit.h>
+#else
+#import <Cocoa/Cocoa.h>
+#endif
+
 
 @class BBElement;
 
 @protocol BBCodeStringDelegate <NSObject>
 
+#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
 - (UIFont *)getFont:(BBElement *)element;
 - (UIColor *)getTextColor:(BBElement *)element;
+#else
+- (NSFont *)getFont:(BBElement *)element;
+- (NSColor *)getTextColor:(BBElement *)element;
+#endif
 - (NSArray *)getSupportedTags;
 
 @end
