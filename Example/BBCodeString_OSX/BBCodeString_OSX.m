@@ -6,35 +6,74 @@
 //  Copyright (c) 2015 Miha Rataj. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
 #import <XCTest/XCTest.h>
+#import <AppKit/AppKit.h>
+#import "BBCodeStringDelegate.h"
+#import "BBCodeString.h"
+#import "BBElement.h"
 
-@interface BBCodeString_OSX : XCTestCase
+@interface BBCodeStringTests : XCTestCase <BBCodeStringDelegate> {
+    BOOL _userTagFontRequested;
+    BOOL _fileTagFontRequested;
+    BOOL _userTagColorRequested;
+    BOOL _fileTagColorRequested;
+}
 
 @end
 
-@implementation BBCodeString_OSX
+@implementation BBCodeStringTests
 
-- (void)setUp {
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-}
+#define kUserTag @"user"
+#define kFileTag @"file"
 
-- (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
+- (void)tearDown
+{
     [super tearDown];
+    
+    XCTAssertTrue(_userTagFontRequested, @"User font not requested");
+    XCTAssertTrue(_fileTagFontRequested, @"File font not requested");
+    XCTAssertTrue(_userTagColorRequested, @"User color not requested");
+    XCTAssertTrue(_fileTagColorRequested, @"File color not requested");
 }
 
-- (void)testExample {
-    // This is an example of a functional test case.
-    XCTAssert(YES, @"Pass");
+- (void)testMakeAttributedString
+{
+    NSString *bbCode = @"[user id=\"42\"]Mary Jones[/user] sent file [file id=\"23\"]Report.pdf[/file].";
+    
+    BBCodeString *bbCodeString = [[BBCodeString alloc] initWithBBCode:bbCode andLayoutProvider:self];
+    XCTAssertNotNil(bbCodeString, @"Cannot be nil");
+    
+    NSString *expectedString = @"Mary Jones sent file Report.pdf.";
+    XCTAssertTrue([bbCodeString.attributedString.string isEqualToString:expectedString], @"Invalid string");
 }
 
-- (void)testPerformanceExample {
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+- (NSFont *)getFont:(BBElement *)element
+{
+    if ([element.tag isEqualToString:kUserTag])
+        _userTagFontRequested = YES;
+    
+    if ([element.tag isEqualToString:kFileTag])
+        _fileTagFontRequested = YES;
+    
+    return [NSFont systemFontOfSize:16.0];
 }
 
+- (NSColor *)getTextColor:(BBElement *)element
+{
+    if ([element.tag isEqualToString:kUserTag])
+        _userTagColorRequested = YES;
+    
+    if ([element.tag isEqualToString:kFileTag])
+        _fileTagColorRequested = YES;
+    
+    return [NSColor darkGrayColor];
+}
+
+- (NSArray *)getSupportedTags
+{
+    return [NSArray arrayWithObjects:
+            kUserTag,
+            kFileTag,
+            nil];
+}
 @end
